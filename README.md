@@ -55,7 +55,7 @@ On vas donc faire un petit nc sur chacune des zone que l'on a trouver :
 nc -nv 192.169.1.15 60000
 ```
 ![nc_cmd_port_60000](/images/nc_cmd_60000.png)  
-Ici on peut voir que ce petit filou de Rick nous a laisser une petite backdoor.  
+Ici on peut voir que ce petit filou de Rick nous a laissé une petite backdoor.  
 On vas donc regarder ce que l'on trouve dans cette zone avec la
  commande [ls](http://man7.org/linux/man-pages/man1/ls.1.html).
  On vient de trouver un fichier <span style="color:#cc33ff">FLAG.txt</span>.
@@ -113,7 +113,9 @@ J'ai utilisé mon propre custom file mais il existe plein de fichier plus ou moi
 On vas donc regarder ce qu'il y a dedans avec `get FLAG.txt /dev/tty` et nous voila maintenant en possetion d'un nouveau
  flag <span style="color:blue">*{Whoa this is unexpected}*</span> ce qui nous monte maintenant a 40 / 130 points.  
 
-On vas maintenant commencer a essayer de voir si l'on ne trouve pas certains acces sur le sites. Comme on n'aime pas attendre on vas accelerer les choses avec la commande [dirb](https://tools.kali.org/web-applications/dirb).
+On vas maintenant commencer a essayer de voir si l'on ne trouve pas certains acces
+ sur le sites. Comme on n'aime pas attendre on vas accelerer les choses avec la
+ commande [dirb](https://tools.kali.org/web-applications/dirb).
  On lance donc la commande suivante :  
 ```
 dirb http://192.168.1.15 /usr/share/worldlists/dirb/big.txt -N 404
@@ -221,28 +223,27 @@ On trouve donc deux fichiers:
 * <span style="color:#cc33ff">Safe_password.jpg</span>.  
 On vas essayer de regarder ce que l'on peut faire de ca. On vas donc lancer la
  commande suivante avec le user `Summer`:  
-
 ```
 cp journal.txt.zip Safe_password.jpg /home/Summer/. ; cp Safe_password.jpg /tmp/.
  ; chown Summer /tmp/Safe_password.jpg                                      
 ```
-On constate que le fichier zip est proteger par un mot de passe. Cohinsidence avec
- le faire qu'il soit accompagner d'un fichier de mot de passe ? Je ne crois pas !
- Mais sait on jamais. On vas la copier pour pouvoir l'ouvrir sur notre ordinateur
+On constate que le fichier zip est protégé par un mot de passe. Coïncidence avec
+ le faite qu'il soit accompagné d'un fichier de mot de passe. Je ne crois pas !
+ Mais sait on jamais. On va la copier pour pouvoir l'ouvrir sur notre ordinateur
  car lire une image sur un terminal n'est pas vraiment lisible pour un humain.
  On lance commande suivante :  
 ```
 scp -P 22222 Summer@192.168.1.15:/tmp/Safe_password.jpg .
 ```
-On ouvre donc le fichier et la >_..._<, rien d'ecrit sur l'image.
-![rick_img](/imges/rick_img.png)
-On vas donc lancer la commande
+On ouvre donc le fichier et là >_..._<, rien d'ecrit sur l'image.  
+![rick_img](/imges/rick_img.png)  
+On va donc lancer la commande  
 ```
 strings Safe_password.jpg
 ```
-![strings_pwd](/imges/strings_pwd.png)
-Genial, Rick a ete malin et sait que Morty est un peut stupide. Du coup il lui a
- clairement ecrit le mot de passe pour
+![strings_pwd](/imges/strings_pwd.png)  
+Génial, Rick a été malin et sait que Morty est un peu stupide. Du coup il lui a
+ clairement écrit le mot de passe pour
  [unzip](https://linux.die.net/man/1/unzip) le fichier !  
 On retourne sur la connexion [ssh](https://linux.die.net/man/1/ssh) et on essaye
  le mot de passe:  
@@ -257,29 +258,29 @@ Allons faire un tour chez Rick maintenant que Morty nous a reveler tous ces secr
 * <span style="color:#cc33ff">ThisDoesntContainsAnyFlags</span>  
 ![unzip_txt](/imges/unzip_txt.png)  
 
-A premiere vue le fichier <span style="color:#cc33ff">NotAFlag.txt</span> n'est
+À première vue le fichier <span style="color:#cc33ff">NotAFlag.txt</span> n'est
  pas un flag. Par contre le fichier <span style="color:#cc33ff">safe</span> est
- deja plus interessant. On se rend compte que c'est un executable. On veut pouvoir
- faire mumuse avec, alors nous allons le copier dans notre home puis l'executer.
+ deja plus interessant. On se rend compte que c'est un exécutable. On veut pouvoir
+ faire mumuse avec, alors nous allons le copier dans notre home puis l'exécuter.  
 ```
 cp /home/RickSanchez/RICKS_SAFE/safe /home/Summer/. ; cd ; ./safe
 ```
 ![run_safe](/imges/run_safe.png)  
 
-Ca y est ! Vous aussi vous faite la relation avec ce que ce bon vieux Morty a dit ?
- Tres bien reessayons mais avec comme premier arguments 131333.
+Ça y est ! Vous aussi vous faites la relation avec ce que ce bon vieux Morty a dit ?
+ Très bien réessayons mais avec comme premiers arguments 131333.  
 ![decrypt_succes](/imges/decrypt_succes.png)  
 
-On touche au but ! En plus d'avoir trouver le flag
+On touche au but ! En plus d'avoir trouvé  le flag
  <span style="color:blue"> *{And Awwwaaaaayyyy We Go!}*</span> qui nous fait avoir
- 20 points en plus et donc arriver a 100 / 130 points ; il nous explique meme
+ 20 points en plus et donc arriver a 100 / 130 points ; il nous explique même
  comment se connecter avec RickSanchez en [ssh](https://linux.die.net/man/1/ssh) !  
 
 ![Wiki_rick](/imges/Wiki_rick.png)  
 Comme Tout le monde le sait le groupe de Rick etait
  <spanstyle="color:red">`The Flesh Curtains`</span>, mais dans le doute on a
  quand meme verifier sur l'internet. Il ne nous reste plus qu'a ecrire un petit
- script.
+ script.  
 ```
 cat > generator_mdp.py
 import string
@@ -290,24 +291,24 @@ with open("mdp.txt", 'w') as f:
             for g in grp_name:
                 f.write(l + d + g + '\n')
 ```
-Maintenant qu'on a notre Script on vas generer toutes les combinaisons de mot de
- passe puis essayer de retrouver le mot de passe grace a
- [patator](https://tools.kali.org/password-attacks/patator).
+Maintenant qu'on a notre script on va générer toutes les combinaisons de
+ mot de passe puis essayer de retrouver le mot de passe grâce à
+ [patator](https://tools.kali.org/password-attacks/patator).  
 ```
 python generator_mdp.py ; patator ssh_login user=RickSanchez host=192.168.1.14 port=22222 password=FILE0 0=mdp.txt -x ignore:mesg='Authentication failed.'
 ```
 Et on a notre mot de passe. Essayons de nous connecter en
-    [ssh](https://linux.die.net/man/1/ssh) en rentrant ce mot de passe
+    [ssh](https://linux.die.net/man/1/ssh) en rentrant ce mot de passe  
 ![ssh_rick_connection](/images/ssh_rick_connection.png)  
 ```
 ssh -p 22222 RickSanchez@192.168.1.15
 ```
 Maintenant que nous sommes OFFICIELLEMENT RickSanchez nous pouvons lancer la
- commande `sudo su` avec le meme mot de passe est ainsi passer root.  
+ commande `sudo su` avec le même mot de passe et ainsi passé Root.  
 ![root_dir](/images/root_dir.png)  
 
-On Retrouve notre dernier flag
+On retrouve notre dernier flag
  <span style="color:blue">*{Ionic Defibrillator}*</span> pour une valeur de 30
- points ce qui nous amenes a 130 sur 130 points !  
+ points ce qui nous amènent à 130 sur 130 points !  
 ![last_flag](/images/last_flag.png)  
-Bravo a toutes et a toute d'avoir reussi ces challenges :) !
+Bravo à toutes et à tous d'avoir réussi ces challenges :)
