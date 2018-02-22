@@ -256,6 +256,7 @@ Allons faire un tour chez Rick maintenant que Morty nous a reveler tous ces secr
  On y retrouve deux Folders:  
 * <span style="color:#cc33ff">RICKS_SAFE</span>
 * <span style="color:#cc33ff">ThisDoesntContainsAnyFlags</span>  
+
 ![unzip_txt](/images/unzip_txt.png)  
 
 À première vue le fichier <span style="color:#cc33ff">NotAFlag.txt</span> n'est
