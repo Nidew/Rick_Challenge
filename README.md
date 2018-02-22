@@ -38,7 +38,7 @@ le paquet d'extension pour plus de confort et eviter des problemes d'installatio
 
 ## Resolution des Challenges
 L'adresse de notre cible est indiquer sur la VM qui tourne sur Virtualbox.  
-![Adresse](/images/Adresse_cible.png)  
+![Adresse](/images/adresse_cible.png)  
 
 On vas donc commencer par scan un peut tout ca avec la commande :  
 
@@ -109,7 +109,7 @@ J'ai utilisé mon propre custom file mais il existe plein de fichier plus ou moi
  une fois connecter on lance notre, [ls](http://man7.org/linux/man-pages/man1/ls.1.html) et encore une fois on voit
  un fichier <span style="color:#cc33ff">FLAG.txt</span>.  
 
-![ftp_cmd](/images/ftp_cmd.png)
+![ftp_cmd](/images/ftp_cmd.png)  
 On vas donc regarder ce qu'il y a dedans avec `get FLAG.txt /dev/tty` et nous voila maintenant en possetion d'un nouveau
  flag <span style="color:blue">*{Whoa this is unexpected}*</span> ce qui nous monte maintenant a 40 / 130 points.  
 
@@ -174,7 +174,7 @@ On vas donc passer au tracertool. Et la il nous proposer d'entrer une adresse ip
  demande. On vas essayer de voir a tout hasard il ne nous laisserais pas renter
  d'autre commande en rajoutant un <span style="color:red">`;`</span> au debut,
  pour executer une autre commande.  
-![tracertool_cgi](/images/tracertool_cgi.png)  
+![tracertool_cgi](/images/ls_tracertool_cgi.png)  
 
 On s'applique donc a lancer la commande suivante :  
 ```
@@ -217,7 +217,7 @@ Maintenant que nous sommes connecter en [ssh](https://linux.die.net/man/1/ssh)
 ```
 clear ; cd /home/Morty ; ls -la
 ```
-![ls_morty_home](/imges/ls_morty_home.png)  
+![ls_morty_home](/images/ls_morty_home.png)  
 On trouve donc deux fichiers:  
 * <span style="color:#cc33ff">journal.txt.zip</span>.  
 * <span style="color:#cc33ff">Safe_password.jpg</span>.  
@@ -236,18 +236,18 @@ On constate que le fichier zip est protégé par un mot de passe. Coïncidence a
 scp -P 22222 Summer@192.168.1.15:/tmp/Safe_password.jpg .
 ```
 On ouvre donc le fichier et là >_..._<, rien d'ecrit sur l'image.  
-![rick_img](/imges/rick_img.png)  
+![rick_img](/images/rick_img.png)  
 On va donc lancer la commande  
 ```
 strings Safe_password.jpg
 ```
-![strings_pwd](/imges/strings_pwd.png)  
+![strings_pwd](/images/strings_pwd.png)  
 Génial, Rick a été malin et sait que Morty est un peu stupide. Du coup il lui a
  clairement écrit le mot de passe pour
  [unzip](https://linux.die.net/man/1/unzip) le fichier !  
 On retourne sur la connexion [ssh](https://linux.die.net/man/1/ssh) et on essaye
  le mot de passe:  
-![unzip_txt](/imges/unzip_txt.png)  
+![unzip_txt](/images/unzip_txt.png)  
 Parfait ! Morty nous confits que c'est un mot de passe a Rick et nous avons
  maintenant un nouveau Flag <span style="color:blue">*{131333}*</span> et celui
  la est a 20 points. On en est maintenant a 80 / 130 points.  
@@ -256,7 +256,7 @@ Allons faire un tour chez Rick maintenant que Morty nous a reveler tous ces secr
  On y retrouve deux Folders:  
 * <span style="color:#cc33ff">RICKS_SAFE</span>
 * <span style="color:#cc33ff">ThisDoesntContainsAnyFlags</span>  
-![unzip_txt](/imges/unzip_txt.png)  
+![unzip_txt](/images/unzip_txt.png)  
 
 À première vue le fichier <span style="color:#cc33ff">NotAFlag.txt</span> n'est
  pas un flag. Par contre le fichier <span style="color:#cc33ff">safe</span> est
@@ -265,22 +265,23 @@ Allons faire un tour chez Rick maintenant que Morty nous a reveler tous ces secr
 ```
 cp /home/RickSanchez/RICKS_SAFE/safe /home/Summer/. ; cd ; ./safe
 ```
-![run_safe](/imges/run_safe.png)  
+![run_safe](/images/run_safe.png)  
 
 Ça y est ! Vous aussi vous faites la relation avec ce que ce bon vieux Morty a dit ?
  Très bien réessayons mais avec comme premiers arguments 131333.  
-![decrypt_succes](/imges/decrypt_succes.png)  
+![decrypt_succes](/images/decrypt_succes.png)  
 
 On touche au but ! En plus d'avoir trouvé  le flag
  <span style="color:blue"> *{And Awwwaaaaayyyy We Go!}*</span> qui nous fait avoir
  20 points en plus et donc arriver a 100 / 130 points ; il nous explique même
  comment se connecter avec RickSanchez en [ssh](https://linux.die.net/man/1/ssh) !  
 
-![Wiki_rick](/imges/Wiki_rick.png)  
-Comme Tout le monde le sait le groupe de Rick etait
- <spanstyle="color:red">`The Flesh Curtains`</span>, mais dans le doute on a
- quand meme verifier sur l'internet. Il ne nous reste plus qu'a ecrire un petit
- script.  
+![Wiki_rick](/images/Wiki_rick.png)  
+Comme Tout le monde le sait le groupe de Rick était
+ <span style="color:red">`The Flesh Curtains`</span>,
+ mais dans le doute on a quand même vérifier sur
+ l'internet. Il ne nous reste plus qu'à écrire un
+ petit script.  
 ```
 cat > generator_mdp.py
 import string
