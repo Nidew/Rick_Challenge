@@ -174,7 +174,6 @@ On vas donc passer au tracertool. Et la il nous proposer d'entrer une adresse ip
  demande. On vas essayer de voir a tout hasard il ne nous laisserais pas renter
  d'autre commande en rajoutant un <span style="color:red">`;`</span> au debut,
  pour executer une autre commande.  
-![tracertool_cgi](/images/ls_tracertool_cgi.png)  
 
 On s'applique donc a lancer la commande suivante :  
 ```
@@ -257,7 +256,7 @@ Allons faire un tour chez Rick maintenant que Morty nous a reveler tous ces secr
 * <span style="color:#cc33ff">RICKS_SAFE</span>
 * <span style="color:#cc33ff">ThisDoesntContainsAnyFlags</span>  
 
-![unzip_txt](/images/unzip_txt.png)  
+![unzip_txt](/images/home_rick.png)  
 
 À première vue le fichier <span style="color:#cc33ff">NotAFlag.txt</span> n'est
  pas un flag. Par contre le fichier <span style="color:#cc33ff">safe</span> est
