@@ -34,68 +34,76 @@ et de connaitre les commandes suivantes:
 Personnellement j'ai utilisé Virtualbox et j'ai configuré le réseau de l'iso en bidge.
 Vous êtes libre de l'utiliser comme bon vous semble comme `NAT Network` ou autres
 Si vos êtes comme moi et avait opté pour Virtualbox, n'oublier pas d'installer
-le paquet d'extension pour plus de confort et eviter des problemes d'installation !
+le paquet d'extension pour plus de confort et éviter des problèmes d'installation !
 
 ## Resolution des Challenges
-L'adresse de notre cible est indiquer sur la VM qui tourne sur Virtualbox.  
+L'adresse de notre cible est indiqué sur la VM qui tourne sur Virtualbox.  
 ![Adresse](/images/adresse_cible.png)  
 
-On vas donc commencer par scan un peut tout ca avec la commande :  
+On va donc commencer par scan un peu tout ça avec la commande :  
 
 ```
 unicornscan -v -I -r 1000 -p 1-65535 192.168.1.15
 ```
 ![cmd_unicornscan](/images/unicornscan_cmd.png)  
 
-On peut voir ici qu'il y a plusieurs point d'entré.  
-On vas donc faire un petit nc sur chacune des zone que l'on a trouver :  
+On peut voir ici qu'il y a plusieurs points d'entrée.  
+Pour les fan de [nmap](https://linux.die.net/man/1/nmap)
+ Une autre solution aurait été de lancer ```nmap 192.168.1.17 -O -sV -p- -T5```  
+On va donc faire un petit [nc](https://linux.die.net/man/1/nc)
+ sur chacune des zones que l'on a trouvées :  
 
 
 ```
-nc -nv 192.169.1.15 60000
+nc -nv 192.168.1.15 60000
 ```
 ![nc_cmd_port_60000](/images/nc_cmd_60000.png)  
 Ici on peut voir que ce petit filou de Rick nous a laissé une petite backdoor.  
-On vas donc regarder ce que l'on trouve dans cette zone avec la
+Un autre option aurait été d'utiliser la commande
+ [telnet](https://linux.die.net/man/1/telnet) comme cela :
+```
+telnet 192.168.1.15
+```
+
+On va donc regarder ce que l'on trouve dans cette zone avec la
  commande [ls](http://man7.org/linux/man-pages/man1/ls.1.html).
  On vient de trouver un fichier <span style="color:#cc33ff">FLAG.txt</span>.
  On lance donc un [cat](http://man7.org/linux/man-pages/man1/cat.1.html) dessus et BINGO
  <span style="color:blue">*{Flip the pickle Morty!}*</span>! Ce qui nous fait 10 / 130 points.  
 
-
 ```
-nc -nv 192.169.1.15 22222
+nc -nv 192.168.1.15 22222
 ```
 ![nc_cmd_port_22222](/images/nc_cmd_22222.png)  
 
-Ici pas de flag. Par contre on peut voir que ce port sert a ce connecter en
+Ici pas de flag. Par contre on peut voir que ce port sert à se connecter en
  [ssh](https://linux.die.net/man/1/ssh) . Si jamais on trouve des identifiants
- au cours de notre exploration, on vas surement pouvoir utiliser ce port pour ce connecter !  
+ au cours de notre exploration, on va surement pouvoir utiliser ce port pour se connecter !  
 
 
 
 ```
-nc -nv 192.169.1.15 13337
+nc -nv 192.168.1.15 13337
 ```
 ![nc_cmd_port_13337](/images/nc_cmd_13337.png)  
 
-On a directement un flag qui s'afficher <span style="color:blue">*{TheyFoundMyBackDoorMorty}*</span>!
- ce qui nous fait a present 20 / 130 points.  
+On a directement un flag qui s'affiche <span style="color:blue">*{TheyFoundMyBackDoorMorty}*</span>!
+ ce qui nous fait à présents 20 / 130 points.  
 
 
-Bien maintenant que l'on a fait les <span style="color:red">`unknown`</span>. On vas passer aux classiques.
+Bien maintenant que l'on a fait les <span style="color:red">`unknown`</span>. On va passer aux classiques.
  Comme dit sur la VM qui run l'iso et sur notre commande [unicornscan](https://linux.die.net/man/1/unicornscan)
  on voit que l'on peut se connecter depuis un brother a l'adresse `https://192.168.1.15:9090`.
  Une fois rendu sur cette page on peut constater que l'on a un autre flag
- <span style="color:blue">*{THERE IS NO ZEUS, IN YOUR FACE!}*</span>. On arrive donc a 30 / 130 points.  
+ <span style="color:blue">*{THERE IS NO ZEUS, IN YOUR FACE!}*</span>. On arrive donc à 30 / 130 points.  
 <!---
 url link img
 -->
 ![web_home](/images/connection_home.png)
 
-
-Passons maintenant a la connection ftp. Pour cela on vas utiliser [hydra](https://tools.kali.org/password-attacks/hydra)
- pour brutforce histoire de voir si par megarde il n'y aurait pas un acces. On vas donc lancer la commande :  
+R
+Passons maintenant à la connexion FTP. Pour cela on va utiliser [hydra](https://tools.kali.org/password-attacks/hydra)
+ pour brut forcé histoire de voir si par megarde il n'y aurait pas un accès. On va donc lancer la commande :  
 ```
 hydra -V -f -L /usr/share/worldlists/dirb/ltl.txt -P /usr/share/worldlists/dirb/ltl.txt ftp://192.168.1.15
 ```
@@ -103,18 +111,20 @@ hydra -V -f -L /usr/share/worldlists/dirb/ltl.txt -P /usr/share/worldlists/dirb/
 url link img
 -->
 ![hydra_result](/images/hydra_result.png)  
-J'ai utilisé mon propre custom file mais il existe plein de fichier plus ou moins gros pour tester ces connexions la.
- Au bout de quelques minutes nous avons trouver un match. Ni une, ni deux, on vas pouvoir voir si l'on trouve quelque chose.
- On lance donc la connexion avec `ftp -p 192.168.1.15`, on se retrouve donc a rentrer les logins et password trouver.
+J'ai utilisé mon propre custom file mais il existe beaucoup de fichiers plus ou moins
+ gros pour tester ces connexions-là.
+ Au bout de quelques minutes nous avons trouvé un match. Ni une, ni deux, on va
+ pouvoir voir si l'on trouve quelque chose.
+ On lance donc la connexion avec `ftp -p 192.168.1.15`, on se retrouve donc à rentrer les logins et password trouver.
  une fois connecter on lance notre, [ls](http://man7.org/linux/man-pages/man1/ls.1.html) et encore une fois on voit
  un fichier <span style="color:#cc33ff">FLAG.txt</span>.  
 
 ![ftp_cmd](/images/ftp_cmd.png)  
-On vas donc regarder ce qu'il y a dedans avec `get FLAG.txt /dev/tty` et nous voila maintenant en possetion d'un nouveau
- flag <span style="color:blue">*{Whoa this is unexpected}*</span> ce qui nous monte maintenant a 40 / 130 points.  
+On va donc regarder ce qu'il y a dedans avec `get FLAG.txt /dev/tty` et nous voilà maintenant en possetion d'un nouveau
+ flag <span style="color:blue">*{Whoa this is unexpected}*</span> ce qui nous monte maintenant à 40 / 130 points.  
 
-On vas maintenant commencer a essayer de voir si l'on ne trouve pas certains acces
- sur le sites. Comme on n'aime pas attendre on vas accelerer les choses avec la
+On va maintenant commencer à essayer de voir si l'on ne trouve pas certains accès
+ sur le site. Comme on n'aime pas attendre on va accélérer les choses avec la
  commande [dirb](https://tools.kali.org/web-applications/dirb).
  On lance donc la commande suivante :  
 ```
@@ -128,7 +138,7 @@ On a des resultat :
 * <span style="color:#cc33ff">robots.txt</span>
 
 
-`http://192.168.1.15/cgi-bin/` n'est pas tres concluant. on se retrouve avec un
+`http://192.168.1.15/cgi-bin/` n'est pas très concluant. on se retrouve avec un
  `Forbidden` et rien dans le code source de la page :/.  
 ![forbidden_acces](/images/forbidden_acces.png)  
 ![forbidden_source](/images/forbidden_source.png)  
@@ -143,23 +153,23 @@ Ah plus de chance cette fois avec cette Directory ! On y retrouve deux fichiers:
 
 ![password_flag](/images/password_flag.png)  
 
-On vas d'abord regarder le contenue du fichier <span style="color:#cc33ff">FLAG.txt</span>
- affin de recupere un notre nouveau flag qui est <span style="color:blue">
- *{Yeah d- just don't do it.}*</span> ce flag etant a 10 nous sommes donc
+On va d'abord regarder le contenue du fichier <span style="color:#cc33ff">FLAG.txt</span>
+ affin de récupère un notre nouveau flag qui est <span style="color:blue">
+ *{Yeah d- just don't do it.}*</span> ce flag étant à 10 nous sommes donc
   maintenant a 50 / 130 points.  
 
 ![passwords_passwords](/images/passwords_passwords.png)  
-Maintenant allons regarder le fichier `passwords.html`. Il n'y a rien de special
- sur cette page. Par contre si l'on regarde le code source on peut trouver ecrit
- en commantaire la phrase <span style="color:red">`Password: winter`</span>.  
-Pas moyen de l'utilisé pour l'instant mais on a recuperer un mot de passe et ca
+Maintenant allons regarder le fichier `passwords.html`. Il n'y a rien de spécial
+ sur cette page. Par contre si l'on regarde le code source on peut trouver écrit
+ en commentaire la phrase <span style="color:red">`Password: winter`</span>.  
+Pas moyen de l'utiliser pour l'instant mais on a récupéré un mot de passe et ça
  c'est toujours cool !
 
 
 Passons maintenant au `robots.txt`  
 ![robots](/images/robots.png)  
 Super ! Finalement
- on vas pouvoir allez les [cgi](https://en.wikipedia.org/wiki/Common_Gateway_Interface).  
+ on va pouvoir allez les [cgi](https://en.wikipedia.org/wiki/Common_Gateway_Interface).  
 On voit qu'il y a donc deux fichiers :  
 * <span style="color:#cc33ff">cgi-bin/root_shell.cgi</span>.  
 * <span style="color:#cc33ff">cgi-bin/tracertool.cgi</span>.  
@@ -169,13 +179,13 @@ On commence donc par l'url du root_shell par ce que les root_shell c'est cool !
 Manque de chance Rick est vraiment un *trou du cul* car il n'a pas fini de le
  coder :/.  
 
-On vas donc passer au tracertool. Et la il nous proposer d'entrer une adresse ip
- pour la tracer. Comme on est des personnes serieuse qui ecoute ce que l'on nous
- demande. On vas essayer de voir a tout hasard il ne nous laisserais pas renter
+On va donc passer au tracertool.Et là il nous proposait d'entrer une adresse ip
+ pour la tracer. Comme on est des personnes sérieuses qui écoutent ce que l'ont nous
+ demande. On va essayer de voir à tout hasard il ne nous laisserait pas renter
  d'autre commande en rajoutant un <span style="color:red">`;`</span> au debut,
- pour executer une autre commande.  
+ pour exécuter une autre commande.  
 
-On s'applique donc a lancer la commande suivante :  
+On s'applique donc à lancer la commande suivante :  
 ```
 ; ls -la
 ```
@@ -187,32 +197,32 @@ Chouette ce n'est pas proteger. On essaye donc :
 ![cat_tracertool_cgi](/images/cat_tracertool_cgi.png)  
 ... On dirais bien qu'il se
  protege contre la commande [cat](http://man7.org/linux/man-pages/man1/cat.1.html).
- On vas donc essayer avec [tac](http://man7.org/linux/man-pages/man1/tac.1.html)!  
+ On va donc essayer avec [tac](http://man7.org/linux/man-pages/man1/tac.1.html)!  
  ```
  ; tac /etc/passwd
  ```
  ![tac_tracertool_cgi](/images/tac_tracertool_cgi.png)  
 
-Nickel ! Si vous vous rapellez bien, nous avions trouver un mot de passe avant.
- et bien maintenant que l'on a recuperer la list des users on vas pouvoir essayer
+Nickel ! Si vous vous rappelez bien, nous avions trouvé un mot de passe avant.
+ Et bien maintenant que l'on a récupéré la liste des users on va pouvoir essayer
  de faire match ce mot de passe avec l'un des users. Vue qu'il n'y a que trois
- utilisateur j'ai essayer directement a la main et la Summer m'a ouvert son coeur:  
+ utilisateurs j'ai essayé directement a la main et la Summer m'a ouvert son coeur:  
  ```
  ssh -p 22222 Summer@192.168.1.15
  ```
 ![connection_summer](/images/connection_summer.png)  
 
 Commencons par le commencement, un petit [ls](http://man7.org/linux/man-pages/man1/ls.1.html),
- nous reveles que l'on a un nouveau fichier <span style="color:#cc33ff">FLAG.txt</span>.
+ nous révèle que l'on a un nouveau fichier <span style="color:#cc33ff">FLAG.txt</span>.
  On lance donc notre `tail FLAG.txt` et un nouveau flag pour nous grace au flag
  <span style="color:blue"> *{Yeah d- just don't do it.}*</span> + 10 points.
- Ce qui nous fait monter a 60 / 130 points.  
+ Ce qui nous fait monter à 60 / 130 points.  
 ![ls_tailf_flag](/images/ls_tailf_flag.png)  
 
 
-Maintenant que nous sommes connecter en [ssh](https://linux.die.net/man/1/ssh)
- on vas pouvoir allez voir ce qu'on Morty est Rick dans leurs Home.
- On vas donc fait la commande suivante avec le User `Summer`:  
+Maintenant que nous sommes connectés en [ssh](https://linux.die.net/man/1/ssh)
+ on va pouvoir allez voir ce qu'on Morty est Rick dans leurs Home.
+ On va donc fait la commande suivante avec le User `Summer`:  
 ```
 clear ; cd /home/Morty ; ls -la
 ```
@@ -220,7 +230,7 @@ clear ; cd /home/Morty ; ls -la
 On trouve donc deux fichiers:  
 * <span style="color:#cc33ff">journal.txt.zip</span>.  
 * <span style="color:#cc33ff">Safe_password.jpg</span>.  
-On vas essayer de regarder ce que l'on peut faire de ca. On vas donc lancer la
+On va essayer de regarder ce que l'on peut faire de ça. On va donc lancer la
  commande suivante avec le user `Summer`:  
 ```
 cp journal.txt.zip Safe_password.jpg /home/Summer/. ; cp Safe_password.jpg /tmp/.
